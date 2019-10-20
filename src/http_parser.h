@@ -195,12 +195,19 @@ enum http_status
   XX(27, UNSUBSCRIBE, UNSUBSCRIBE)  \
   /* RFC-5789 */                    \
   XX(28, PATCH,       PATCH)        \
-  XX(29, PURGE,       PURGE)        \
+  XX(38, PURGE,       PURGE)        \
   /* CalDAV */                      \
   XX(30, MKCALENDAR,  MKCALENDAR)   \
   /* RFC-2068, section 19.6.1.2 */  \
   XX(31, LINK,        LINK)         \
   XX(32, UNLINK,      UNLINK)       \
+  /* RFC-2068, section 19.6.1.2 */  \
+  XX(33, LIST,      LIST)       \
+  XX(34, HISTORY,      HISTORY)       \
+  XX(35, CLAIM,      CLAIM)       \
+  XX(36, CREATE,      CREATE)       \
+  XX(37, CHANGE,      CHANGE)       \
+  XX(38, VERIFY,      VERIFY)       \
 
 enum http_method
   {

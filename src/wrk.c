@@ -58,7 +58,14 @@ static void usage() {
            "  Time arguments may include a time unit (2s, 2m, 2h)\n");
 }
 
+//hadi
+FILE *fptr = NULL;
+
 int main(int argc, char **argv) {
+
+    //hadi
+    fptr = fopen("latency.txt", "w");
+
     char *url, **headers = zmalloc(argc * sizeof(char *));
     struct http_parser_url parts = {};
 
@@ -170,6 +177,16 @@ int main(int argc, char **argv) {
         stats_correct(statistics.latency, interval);
     }
 
+    //hadi log
+    // printf("*********************\n");
+    // for (uint64_t i = statistics.latency->min; i <= statistics.latency->max; i++) {
+    //     for(uint64_t j=0;j<statistics.latency->data[i];j++){
+    //         printf("%" PRId64 "\n", i);
+    //     }
+    // }
+    // printf("count %d\n", (long double) statistics.latency->count);
+    // printf("*********************\n");
+
     print_stats_header();
     print_stats("Latency", statistics.latency, format_time_us);
     print_stats("Req/Sec", statistics.requests, format_metric);
@@ -196,6 +213,8 @@ int main(int argc, char **argv) {
         script_done(L, statistics.latency, statistics.requests);
     }
 
+    //hadi
+    fclose(fptr);
     return 0;
 }
 
@@ -277,6 +296,9 @@ static int record_rate(aeEventLoop *loop, long long id, void *data) {
         uint64_t elapsed_ms = (time_us() - thread->start) / 1000;
         uint64_t requests = (thread->requests / (double) elapsed_ms) * 1000;
 
+        //hadi
+        //not complete
+        // fprintf(fptr,"ss %" PRId64 "\n", requests);
         stats_record(statistics.requests, requests);
 
         thread->requests = 0;
@@ -341,6 +363,8 @@ static int response_complete(http_parser *parser) {
     }
 
     if (--c->pending == 0) {
+        //hadi
+        fprintf(fptr,"%" PRId64 "\n", now - c->start);
         if (!stats_record(statistics.latency, now - c->start)) {
             thread->errors.timeout++;
         }
@@ -544,7 +568,7 @@ static int parse_args(struct config *cfg, char **url, struct http_parser_url *pa
 }
 
 static void print_stats_header() {
-    printf("  Thread Stats%6s%11s%8s%12s\n", "Avg", "Stdev", "Max", "+/- Stdev");
+    printf("  Thread Stats%6s%11s%8s%8s%12s\n", "Avg", "Stdev", "Max", "Min", "+/- Stdev");
 }
 
 static void print_units(long double n, char *(*fmt)(long double), int width) {
@@ -562,6 +586,7 @@ static void print_units(long double n, char *(*fmt)(long double), int width) {
 
 static void print_stats(char *name, stats *stats, char *(*fmt)(long double)) {
     uint64_t max = stats->max;
+    uint64_t min = stats->min;
     long double mean  = stats_mean(stats);
     long double stdev = stats_stdev(stats, mean);
 
@@ -569,6 +594,7 @@ static void print_stats(char *name, stats *stats, char *(*fmt)(long double)) {
     print_units(mean,  fmt, 8);
     print_units(stdev, fmt, 10);
     print_units(max,   fmt, 9);
+    print_units(min,   fmt, 9);
     printf("%8.2Lf%%\n", stats_within_stdev(stats, mean, stdev, 1));
 }
 

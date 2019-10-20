@@ -945,6 +945,7 @@ reexecute:
           case 'R': parser->method = HTTP_REPORT; /* or REBIND */ break;
           case 'S': parser->method = HTTP_SUBSCRIBE; /* or SEARCH */ break;
           case 'T': parser->method = HTTP_TRACE; break;
+          case 'V': parser->method = HTTP_VERIFY; break;
           case 'U': parser->method = HTTP_UNLOCK; /* or UNSUBSCRIBE, UNBIND, UNLINK */ break;
           default:
             SET_ERRNO(HPE_INVALID_METHOD);
@@ -981,7 +982,9 @@ reexecute:
             XX(POST,      1, 'A', PATCH)
             XX(POST,      1, 'R', PROPFIND)
             XX(PUT,       2, 'R', PURGE)
-            XX(CONNECT,   1, 'H', CHECKOUT)
+            XX(CONNECT,   1, 'H', CHANGE)
+            XX(CONNECT,   1, 'L', CLAIM)
+            XX(CONNECT,   1, 'R', CREATE)
             XX(CONNECT,   2, 'P', COPY)
             XX(MKCOL,     1, 'O', MOVE)
             XX(MKCOL,     1, 'E', MERGE)
@@ -991,10 +994,13 @@ reexecute:
             XX(SUBSCRIBE, 1, 'E', SEARCH)
             XX(REPORT,    2, 'B', REBIND)
             XX(PROPFIND,  4, 'P', PROPPATCH)
-            XX(LOCK,      1, 'I', LINK)
+            XX(LOCK,      1, 'I', LIST)
+            XX(LOCK,      2, 'N', LINK)
             XX(UNLOCK,    2, 'S', UNSUBSCRIBE)
             XX(UNLOCK,    2, 'B', UNBIND)
             XX(UNLOCK,    3, 'I', UNLINK)
+            XX(HEAD,      1, 'I', HISTORY)
+
 #undef XX
             default:
               SET_ERRNO(HPE_INVALID_METHOD);
