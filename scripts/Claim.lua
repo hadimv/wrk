@@ -1,14 +1,12 @@
 local cjson = require "cjson"
 
-
 request = function()
-   local n = 0
-   number = 09
-   math.randomseed(os.clock() * 1000000000)
+   number = '09'
+   math.randomseed(os.clock() * 10000000000)
    number = number..math.random(100000000, 900000000)
-   t = {username = number}
-   wrk.body = cjson.encode(t)
-   wrk.method = "VERIFY"
+   body = {phoneNumber = number}
+   wrk.body = cjson.encode(body)
+   wrk.method = "CLAIM"
    wrk.headers["Content-Type"] = "application/json"
    return wrk.format()
 end

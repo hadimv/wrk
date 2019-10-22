@@ -59,12 +59,12 @@ static void usage() {
 }
 
 //hadi
-FILE *fptr = NULL;
+// FILE *fptr = NULL;
 
 int main(int argc, char **argv) {
 
     //hadi
-    fptr = fopen("latency.txt", "w");
+    // fptr = fopen("latency.txt", "w");
 
     char *url, **headers = zmalloc(argc * sizeof(char *));
     struct http_parser_url parts = {};
@@ -214,7 +214,7 @@ int main(int argc, char **argv) {
     }
 
     //hadi
-    fclose(fptr);
+    // fclose(fptr);
     return 0;
 }
 
@@ -364,7 +364,7 @@ static int response_complete(http_parser *parser) {
 
     if (--c->pending == 0) {
         //hadi
-        fprintf(fptr,"%" PRId64 "\n", now - c->start);
+        // fprintf(fptr,"%" PRId64 "\n", now - c->start);
         if (!stats_record(statistics.latency, now - c->start)) {
             thread->errors.timeout++;
         }
